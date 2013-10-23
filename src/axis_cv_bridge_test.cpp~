@@ -1,0 +1,66 @@
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+
+#include <sensor_msgs/image_encodings.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+namespace enc = sensor_msgs::image_encodings;
+
+class ImageConverter
+{
+    ros::NodeHandle nh_;
+    image_transport::ImageTransport image_trans_;
+    image_transport::Subscriber image_sub_;
+    image_transport::Publisher image_pub_;
+
+public:
+    ImageConverter()
+        : image_trans_(nh_)
+    {
+        image_pub_ = image_trans_.advertise("out", 1);//publisherに設定。出力topic名は"out"
+        image_sub_ = image_trans_.subscribe("image_raw/compressed", 1, &ImageConverter::image_callback, this);//subscriber設定。topic名は"image_raw"。コールバック関数を登録
+
+        cv::namedWindow("Image window");//Window初期化
+    }
+
+    ~ImageConverter()
+    {
+        cv::destroyWindow("Image window");
+    }
+
+    void image_callback(const sensor_msgs::ImageConstPtr& msg)
+    {
+        cv_bridge::CvImagePtr cv_ptr;
+        try
+        {
+            cv_ptr = cv_bridge::toCvCopy(msg, enc::BGR8);//cv_ptr型に変換.cv_ptr->imageがcv::Mat
+        }
+        catch (cv_bridge::Exception& e)
+        {
+            ROS_ERROR("cv_bridge exception: %s", e.what());
+            return;
+        }
+
+        //ここから処理
+
+        cv::imshow("Image window", cv_ptr->image);
+        cv::waitKey(3);
+
+        //ここまで処理
+
+        //処理後の画像をpublish
+        image_pub_.publish(cv_ptr->toImageMsg());//cv_ptr->toImageMsg()でsensor_msgs::Imageを返す
+    }
+};
+
+int main(int argc, char** argv)
+{
+    ros::init(argc, argv, "image_converter");
+    ImageConverter ic;
+    ros::spin();
+    return 0;
+}
+
+

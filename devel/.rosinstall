@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/masahiko/catkin_ws/src/objectDetector/devel/setup.sh

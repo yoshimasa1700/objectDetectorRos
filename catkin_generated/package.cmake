@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "objectDetector")
+set(objectDetector_MAINTAINER "toyos <m.yoshi.1700@gmail.com>")
+set(objectDetector_DEPRECATED "")
+set(objectDetector_VERSION "0.0.0")
+set(objectDetector_BUILD_DEPENDS "cv_bridge" "OpenCV" "roscpp" "sensor_msgs" "std_msgs" "image_transport")
+set(objectDetector_RUN_DEPENDS "cv_bridge" "OpenCV" "roscpp" "sensor_msgs" "std_msgs" "image_transport")
+set(objectDetector_BUILDTOOL_DEPENDS "catkin")

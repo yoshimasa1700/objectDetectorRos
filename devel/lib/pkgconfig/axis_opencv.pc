@@ -1,0 +1,8 @@
+prefix=/home/masahiko/catkin_ws/src/axis_opencv/devel
+
+Name: axis_opencv
+Description: Description of axis_opencv
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/masahiko/catkin_ws/src/axis_opencv/devel/lib 
+Requires: 

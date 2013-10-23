@@ -1,0 +1,8 @@
+prefix=/home/masahiko/catkin_ws/src/objectDetector/devel
+
+Name: objectDetector
+Description: Description of objectDetector
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/masahiko/catkin_ws/src/objectDetector/devel/lib 
+Requires: 
