@@ -15,6 +15,7 @@
 #include <boost/filesystem.hpp>
 
 #include <objectDetector/Detect.h>
+#include <objectDetector/Pos.h>
 
 namespace enc = sensor_msgs::image_encodings;
 
@@ -41,7 +42,10 @@ cv::namedWindow("Image window");
 //cv::namedWindow("mask");
 //cv::namedWindow("result");
 
-detect_pub = nh_.advertise<objectDetector::Detect>("objectdetector1/detect",1);
+detect_pub = nh_.advertise<objectDetector::Detect>("objectdetector/detect",1);
+blue_pub = nh_.advertise<objectDetector::Pos>("objectdetector/blue",1);
+orange_pub = nh_.advertise<objectDetector::Pos>("objectdetector/orange",1);
+sign_pub = nh_.advertise<objectDetector::Pos>("objectdetector/sign",1);
 
 }
 
@@ -76,6 +80,10 @@ detectR = forest->detection(seqImg);
 
 objectDetector::Detect detectResult;
 detect_pub.publish(detectResult);
+objectDetector::Pos pos;
+blue_pub.publish(pos);
+orange_pub.publish(pos);
+sign_pub.publish(pos);
 
     
 cv::imshow("Image window", inputImage);	
@@ -116,6 +124,9 @@ image_transport::Subscriber image_sub_;
 image_transport::Publisher image_pub_;
 
 ros::Publisher detect_pub;
+ros::Publisher blue_pub;
+ros::Publisher orange_pub;
+ros::Publisher sign_pub;
 
 CRForest *forest;
 CConfig conf;
