@@ -21,6 +21,7 @@ public:
     
     conf.loadConfig("config.xml");
     conf.demoMode = 1;
+    conf.tsukubaMode = 1;
     forest = NULL;
     forest = new CRForest(conf);
     forest->loadForest();
