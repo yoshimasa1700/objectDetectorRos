@@ -12,6 +12,8 @@
 #include <HFMD_core/util.h>
 #include <HFMD_core/CDataset.h>
 
+#include <boost/filesystem.hpp>
+
 namespace enc = sensor_msgs::image_encodings;
 
 class ImageConverter
@@ -19,6 +21,9 @@ class ImageConverter
 public:
   ImageConverter() : image_trans_(nh_){
     
+        std::cerr << boost::filesystem::current_path() << std::endl;
+
+
     conf.loadConfig("config.xml");
     conf.demoMode = 1;
     conf.tsukubaMode = 1;
