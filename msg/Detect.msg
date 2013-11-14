@@ -1,5 +1,10 @@
-int8 Found
-int8 Blue
-int8 Orange
-int8 Signboard
+bool Found
+bool Blue
+bool Orange
+bool Signboard
+
+Pos p_blue
+Pos p_orange
+Pos p_signboard
+
 time Time

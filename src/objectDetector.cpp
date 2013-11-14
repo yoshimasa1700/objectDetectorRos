@@ -43,10 +43,6 @@ cv::namedWindow("Image window");
 //cv::namedWindow("result");
 
 detect_pub = nh_.advertise<objectDetector::Detect>("objectdetector/detect",1);
-blue_pub = nh_.advertise<objectDetector::Pos>("objectdetector/blue",1);
-orange_pub = nh_.advertise<objectDetector::Pos>("objectdetector/orange",1);
-sign_pub = nh_.advertise<objectDetector::Pos>("objectdetector/sign",1);
-
 }
 
 ~ImageConverter()
@@ -79,13 +75,14 @@ detectR = forest->detection(seqImg);
 
 
 objectDetector::Detect detectResult;
-detect_pub.publish(detectResult);
-objectDetector::Pos pos;
-blue_pub.publish(pos);
-orange_pub.publish(pos);
-sign_pub.publish(pos);
+ objectDetector::Pos p_blue, p_orange, p_sign;
+ 
+ detectResult.p_blue = p_blue;
+ detectResult.p_orange = p_orange;
+ detectResult.p_signboard = p_sign;
 
-    
+detect_pub.publish(detectResult);
+
 cv::imshow("Image window", inputImage);	
     
 	
