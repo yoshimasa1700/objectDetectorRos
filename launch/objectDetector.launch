@@ -1,5 +1,5 @@
 <launch>
-	<node pkg="objectDetector" type="objectDetector" args="/home/egawa/tmp/2013-10-27-15-51-40.bag" name="objectDetector" output="screen">
+	<node pkg="objectDetector" type="objectDetector" args="$(find objectDetector)/config.xml $(find objectDetector)/trees"  name="objectDetector" output="screen">
 		<param name="image_transport" value="compressed"/>
 	</node>
 </launch>
