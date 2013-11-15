@@ -74,9 +74,12 @@ cv::Mat inputImage(cv_ptr->image);
 CTestDataset seqImg;
 CDetectionResult detectR;
 
-seqImg.img.push_back(&inputImage);
-detectR = forest->detection(seqImg);
+ cv::Mat resizeImg;
 
+ cv::resize(inputImage, resizeImg, cv::Size(inputImage.cols/2, inputImage.rows/2), 0 , 0);
+
+seqImg.img.push_back(&resizeImg);
+detectR = forest->detection(seqImg);
 
 objectDetector::Detect detectResult;
 detect_pub.publish(detectResult);
@@ -85,9 +88,17 @@ blue_pub.publish(pos);
 orange_pub.publish(pos);
 sign_pub.publish(pos);
 
+ 
+ cv::Point sbord = detectR.detectedClass.at(0).centerPoint;
+ cv::circle(inputImage, sbord, 5,cv::Scalar(255,0,0),2);
+
+ cv::Point sbord = detectR.detectedClass.at(1).centerPoint;
+ cv::circle(inputImage, sbord, 5,cv::Scalar(0,0,0),2);
+
+ cv::Point sbord = detectR.detectedClass.at(2).centerPoint;
+ cv::circle(inputImage, sbord, 5,cv::Scalar(255,0,0),2);
     
 cv::imshow("Image window", inputImage);	
-    
 	
 int key = cv::waitKey(1);
 
