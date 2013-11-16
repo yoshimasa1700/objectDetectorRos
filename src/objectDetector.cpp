@@ -67,6 +67,7 @@ public:
 
   void image_callback(const sensor_msgs::ImageConstPtr& msg){
 
+    std::cout<< msg->header.stamp<<std::endl;
     cv_bridge::CvImagePtr cv_ptr;
     try{
       cv_ptr = cv_bridge::toCvCopy(msg, enc::BGR8);
@@ -92,7 +93,8 @@ public:
 
     cv::Mat resizeImg;
 
-    cv::resize(inputImage, resizeImg, cv::Size(inputImage.cols/graphRatio, inputImage.rows/graphRatio), 0 , 0);
+    cv::resize(inputImage, resizeImg, 
+	       cv::Size(inputImage.cols/graphRatio, inputImage.rows/graphRatio), 0 , 0);
 
     seqImg.img.push_back(&resizeImg);
     detectR = forest->detection(seqImg);
@@ -100,12 +102,13 @@ public:
     objectDetector::Detect detectResult;
     objectDetector::Pos p_blue, p_orange, p_sign;
  
+    detectResult.header = msg->header;
 
-
- 
     std::vector<bool> fP(3,0);
     bool ff = 0;
 
+
+    detectResult.s_blue = detectR.detectedClass[0].score;
     if(detectR.detectedClass.at(0).score > th[0]){
       cv::Point bluej = detectR.detectedClass.at(0).centerPoint;
       bluej = bluej * graphRatio;
@@ -117,6 +120,7 @@ public:
       p_blue.y = bluej.y;
     }
 
+    detectResult.s_orange = detectR.detectedClass[1].score;
     if(detectR.detectedClass.at(1).score > th[1]){
       cv::Point orangej = detectR.detectedClass.at(1).centerPoint;
       orangej = orangej * graphRatio;
@@ -127,6 +131,8 @@ public:
       p_orange.x = orangej.x;
       p_orange.y = orangej.y;
     }
+
+    detectResult.s_signboard = detectR.detectedClass[2].score;
     if(detectR.detectedClass.at(2).score > th[2]){
       cv::Point sbord = detectR.detectedClass.at(2).centerPoint;
       sbord = sbord * graphRatio;
@@ -179,7 +185,9 @@ public:
     //ここまで処理
 
     //処理後の画像をpublish
-    //image_pub_.publish(cv_ptr->toImageMsg());
+
+    cv_ptr->image = inputImage;
+    image_pub_.publish(cv_ptr->toImageMsg());
   }
 
   ros::NodeHandle nh_;
